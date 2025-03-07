@@ -32,6 +32,11 @@ void VideoServer::clientCloseCallback(const TcpConnectionPtr &conn)
         return;
     
     conn->getLoop()->cancel(index->second);
+    usleep(100000);
+    cap->second->close();
+    usleep(100000);
+    m_taskIndexes.erase(index);
+    m_mediaChannls.erase(cap);
 }
 
 void VideoServer::messageCallback(const Buffer *input, const TcpConnectionPtr &conn) 
@@ -64,6 +69,12 @@ void VideoServer::messageCallback(const Buffer *input, const TcpConnectionPtr &c
     } 
 
     if (cmd == "start") {
+        auto cap = m_mediaChannls.find(conn->fd());
+        if (cap != m_mediaChannls.end()) {
+            WebSocketServer::getInstance()->send("replay", 6, WSCodeType::WSCodeText, conn);
+            return;
+        }
+        
         m_mediaChannls.insert(std::make_pair(conn->fd(), std::make_unique<RtspCapture>()));
         m_mediaChannls.find(conn->fd())->second->init();
         bool re = m_mediaChannls.find(conn->fd())->second->open(url.c_str());
@@ -84,7 +95,11 @@ void VideoServer::messageCallback(const Buffer *input, const TcpConnectionPtr &c
             return;
         
         conn->getLoop()->cancel(index->second);
-        usleep(10000);
+        usleep(100000);
+        cap->second->close();
+        usleep(100000);
+        m_taskIndexes.erase(index);
+        m_mediaChannls.erase(cap);
         WebSocketServer::getInstance()->send(stop_back.c_str(), stop_back.size(), WSCodeType::WSCodeText, conn);
     }
 }
