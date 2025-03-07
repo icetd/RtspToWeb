@@ -1,5 +1,6 @@
 #include "VideoServer.h"
 #include "Logger.h"
+#include "INIReader.h"
 #include <nlohmann/json.hpp>
 #include <iostream>
 
@@ -8,7 +9,21 @@ using nlohmann::json;
 VideoServer::VideoServer() :
     m_loop(new EventLoop())
 {
-    m_server = std::make_unique<WebSocketServer>(m_loop, InetAddress(9000));
+    INIReader configs("./configs/config.ini");
+    if (configs.ParseError() < 0) {
+        printf("read config failed.");
+        exit(1);
+    } else {
+        m_config.log_level = configs.GetInteger("log", "level", 4);
+        m_config.log_basename = configs.Get("log", "basename", "./default");
+        m_config.port = configs.GetInteger("server", "port", 8000);
+        m_config.thread_num = configs.GetInteger("server", "threadnum", 1);
+    }
+
+    Logger::setLogFileName(m_config.log_basename);
+    Logger::setLogLevel(static_cast<Logger::LogLevel>(m_config.log_level));
+    Logger::setOutput(AsyncOutput);
+    m_server = std::make_unique<WebSocketServer>(m_loop, InetAddress(m_config.port));
 }
 
 VideoServer::~VideoServer()
@@ -104,12 +119,12 @@ void VideoServer::messageCallback(const Buffer *input, const TcpConnectionPtr &c
     }
 }
 
-void VideoServer::run(int thread_num)
+void VideoServer::run()
 {
     m_server->setClientConnectCallback([this](const TcpConnectionPtr &conn) { clientConnectCallback(conn); });
     m_server->setClientCloseCallback([this](const TcpConnectionPtr &conn) { clientCloseCallback(conn); });
     m_server->setHttpCallback([this](const Buffer *input, const TcpConnectionPtr &conn) { messageCallback(input, conn); });
-    m_server->start(thread_num);
+    m_server->start(m_config.thread_num);
     m_loop->loop();
 }
 

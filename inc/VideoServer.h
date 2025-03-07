@@ -11,10 +11,19 @@ using namespace inet;
 class VideoServer
 {
 public:
+    typedef struct
+    {
+        int port;
+        int thread_num;
+        int log_level;
+        std::string log_basename;
+    } Config_t;
+    
     VideoServer();
     ~VideoServer();
-    void run(int thread_num);
+    void run();
 private:
+    Config_t m_config;
     EventLoop *m_loop;
     std::unique_ptr<WebSocketServer> m_server;
     std::unordered_map<int, std::unique_ptr<RtspCapture>> m_mediaChannls;

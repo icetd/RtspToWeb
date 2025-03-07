@@ -47,3 +47,5 @@ list(APPEND EXTRA_LIBS
 target_link_libraries ( ${PROJECT_NAME}
 	${EXTRA_LIBS}
 )
+
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/configs DESTINATION ${CMAKE_BINARY_DIR})
