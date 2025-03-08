@@ -6,16 +6,18 @@ set(CMAKE_BUILD_TYPE Debug)
 
 add_subdirectory(thirdparty/json)
 add_subdirectory(thirdparty/inet)
-add_subdirectory(thirdparty/FFmpeg)
 
 set (SOURCE_DIR 	    "${CMAKE_SOURCE_DIR}/src")
 set (INC_DIR 	        "${CMAKE_SOURCE_DIR}/inc")
 set (JSON_INC           "${CMAKE_SOURCE_DIR}/thirdparty/json/include")
 set (INET_INC           "${CMAKE_SOURCE_DIR}/thirdparty/inet/inc")
+set (FFMPEG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/thirdparty/FFmpeg/include")
+set (FFMPEG_LIB_DIR     "${CMAKE_SOURCE_DIR}/thirdparty/FFmpeg/lib")
 
 message(STATUS "---")
 
 link_directories(
+    ${FFMPEG_LIB_DIR}
 )
 
 include_directories(
@@ -27,6 +29,7 @@ include_directories(
     ${INET_INC}/net
     ${INET_INC}/websocket
     ${INET_INC}/util
+    ${FFMPEG_INCLUDE_DIR}
 )
 
 file(GLOB_RECURSE SRC_FILES
