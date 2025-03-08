@@ -2,11 +2,17 @@
 Read Rtsp url and send h264 raw stream to websocket frame by frame
 
 ## build
-depengs on ffmpeg release/4.3
 ```
-git submodule update --init
-./scripts/build_ffmpeg.sh
+sudo apt install -y \
+libavcodec-dev \
+libavformat-dev \
+libavfilter-dev \
+libavdevice-dev \
+libavutil-dev \
+libswresample-dev \
+libswscale-dev 
 
+git submodule update --init
 mkdir build && cd build
 cmake ..
 make -j8

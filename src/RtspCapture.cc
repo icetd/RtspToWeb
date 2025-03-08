@@ -154,14 +154,9 @@ int RtspCapture::geth264(char *frame)
             continue;
         }
 
-        AVBitStreamFilterContext *h264bsfc = av_bitstream_filter_init("h264_mp4toannexb");
-        uint8_t *outbuf = NULL;
-        av_bitstream_filter_filter(h264bsfc, av_format_ctx->streams[av_packet->stream_index]->codec, NULL,
-                                   &outbuf, &size, av_packet->data, av_packet->size, 0);
-        av_bitstream_filter_close(h264bsfc);
-
         std::lock_guard<std::mutex> lock(buffer_mutex);
-        memcpy(frame, outbuf, size);
+        memcpy(frame, av_packet->data, av_packet->size);
+        size = av_packet->size;
         av_packet_unref(av_packet);
         return size;
     }

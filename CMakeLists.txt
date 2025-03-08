@@ -6,6 +6,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 add_subdirectory(thirdparty/json)
 add_subdirectory(thirdparty/inet)
+add_subdirectory(thirdparty/FFmpeg)
 
 set (SOURCE_DIR 	    "${CMAKE_SOURCE_DIR}/src")
 set (INC_DIR 	        "${CMAKE_SOURCE_DIR}/inc")
