@@ -22,7 +22,7 @@ VideoServer::VideoServer() :
 
     Logger::setLogFileName(m_config.log_basename);
     Logger::setLogLevel(static_cast<Logger::LogLevel>(m_config.log_level));
-    Logger::setOutput(AsyncOutput);
+    Logger::setOutput(DefaultOutput);
     m_server = std::make_unique<WebSocketServer>(m_loop, InetAddress(m_config.port));
 }
 
