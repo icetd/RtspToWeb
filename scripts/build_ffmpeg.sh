@@ -24,10 +24,8 @@ then
     --cc="gcc" --cxx="g++" \
     --target-os=none \
     --cpu=generic --enable-gpl \
-    --enable-version3 --disable-avdevice  \
-    --disable-postproc --disable-avfilter \
+    --enable-version3  \
     --disable-programs --disable-logging \
-    --disable-everything --enable-avformat  \
     --enable-decoder=hevc --enable-decoder=h264 --enable-decoder=h264_qsv \
     --enable-decoder=hevc_qsv \
     --enable-decoder=aac \
