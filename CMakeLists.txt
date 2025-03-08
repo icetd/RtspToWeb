@@ -4,6 +4,9 @@ project(RtspToWeb)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_BUILD_TYPE Debug)
 
+# you can set your ffmpeg install path here
+# set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:/usr/local/ffmpeg/lib/pkgconfig")
+
 add_subdirectory(thirdparty/json)
 add_subdirectory(thirdparty/inet)
 add_subdirectory(thirdparty/FFmpeg)
