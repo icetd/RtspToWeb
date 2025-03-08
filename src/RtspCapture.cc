@@ -56,15 +56,11 @@ bool RtspCapture::open(const char* url)
 	av_dump_format(av_format_ctx, NULL, NULL, false);
 
 	AVCodecParameters* av_codec_params;
-	AVCodec* av_codec;
 	AVStream* av_stream;
 
 	for (uint32_t i = 0; i < av_format_ctx->nb_streams; ++i) {
 		av_stream = av_format_ctx->streams[i];
 		av_codec_params = av_format_ctx->streams[i]->codecpar;
-		av_codec = avcodec_find_decoder(av_codec_params->codec_id);
-		if (!av_codec)
-			continue;
 
 		if (av_codec_params->codec_type == AVMEDIA_TYPE_VIDEO) {
 			video_stream_index = i;
